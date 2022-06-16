@@ -1,0 +1,639 @@
+000100******************************************************************
+000200* NOM. DESCR: ESTE PROGRAMA GRABA EN FICH. SECUENCIAL -EMPLEADO- *
+000300*             DESDE EL FICHERO SECUENCIAL.                       *
+000400* OBJETIVE:   PRUEBA NUMERO 1                                    *
+001600* TYPE:       BATCH/COPY                                         *
+001700* INPUTS:     DATOS DEL SISTEMA (FECHA Y HORA)                   *
+001800*             DATOS DE SYSIN (TITULO)                            *
+001900*             FICHERO DE ENTRADA SECUENCIAL -EMPLEADO-:          *
+002000*                     T9716.T9716XX.ZENT307.EMPLEADO             *
+002100* OUTPUTS:    FICHERO DE SALIDA SECUENCIAL -EMPLEADO-:           *
+002200*                     T9716.T9716XX.ZSAL308.EMPLEADO             *
+002300******************************************************************
+002400
+002500******************************************************************
+002600*                   IDENTIFICATION DIVISION                      *
+002700******************************************************************
+002800 IDENTIFICATION DIVISION.
+002900 PROGRAM-ID. PB23P01.
+003000 AUTHOR. ACCENTURE_DENISSE.
+003100 DATE-WRITTEN. MAYO, 2022.
+003200 DATE-COMPILED.
+003300
+003400******************************************************************
+003500*                  ENVIRONMENT DIVISION                          *
+003600******************************************************************
+003700 ENVIRONMENT DIVISION.
+003800 CONFIGURATION SECTION.
+003900
+004000 SOURCE-COMPUTER. IBM-390.
+004100 OBJECT-COMPUTER. IBM-390.
+004200
+004300 SPECIAL-NAMES.
+004400     DECIMAL-POINT IS COMMA.
+004500
+004600 INPUT-OUTPUT SECTION.
+004700 FILE-CONTROL.
+004800
+004900******************************************************************
+005000*                      INPUT FILE                                *
+005100*----------------------------------------------------------------*
+005200*   FICHERO DE EMPLEADO                                             *
+005300******************************************************************
+005400     SELECT EMPLEADO
+005500       ASSIGN TO ENTJCL
+005600       ORGANIZATION IS SEQUENTIAL
+005700       ACCESS MODE IS SEQUENTIAL
+005800       FILE STATUS IS FS-EMPLEADO.
+005900
+006000******************************************************************
+006100*                     OUTPUT FILE                                *
+006200*----------------------------------------------------------------*
+006300*   FICHERO DE SALIDA EMPLEADO CON MAS CAMPOS(DPTO Y SALARIO)    *
+006400******************************************************************
+006500     SELECT SALIDA
+006600         ASSIGN TO SALJCL
+006700         ORGANIZATION IS SEQUENTIAL
+006800         ACCESS MODE   IS SEQUENTIAL
+006900         FILE STATUS  IS FS-SALIDA.
+006910
+007000******************************************************************
+007100*                       DATA DIVISION                            *
+007200******************************************************************
+007300 DATA DIVISION.
+007400 FILE SECTION.
+007500 FD  EMPLEADO
+007600     LABEL RECORDS ARE STANDARD
+007700     RECORDING MODE IS F
+007800     BLOCK CONTAINS 0 RECORDS
+007900     RECORD CONTAINS 100 CHARACTERS
+008000     DATA RECORD IS REG-EMPLEADO.
+008100 01  REG-EMPLEADO                    PIC X(100).
+008200
+008300 FD  SALIDA
+008400     LABEL RECORDS ARE STANDARD
+008500     RECORDING MODE IS F
+008600     BLOCK CONTAINS 0 RECORDS
+008700     RECORD CONTAINS 132 CHARACTERS
+008800     DATA RECORD IS REG-SALIDA.
+008900 01  REG-SALIDA                      PIC X(132).
+009000
+009100******************************************************************
+009200*                    WORKING STORAGE SECTION                     *
+009300******************************************************************
+009400 WORKING-STORAGE SECTION.
+009500 01  WORK-AREA.
+009600
+009610******************************************************************
+009620*                    WORKING STORAGE SECTION                     *
+009630******************************************************************
+009640     05  PROVINCIAS.
+009650         10  FILLER                  PIC X(24)
+009660                             VALUE '01ALAVA                 '.
+009670         10  FILLER                  PIC X(24)
+009680                             VALUE '02ALBACETE              '.
+009690         10  FILLER                  PIC X(24)
+009691                             VALUE '03ALICANTE              '.
+009692         10  FILLER                  PIC X(24)
+009693                             VALUE '04ALMERIA               '.
+009694         10  FILLER                  PIC X(24)
+009695                             VALUE '05AVILA                 '.
+009696         10  FILLER                  PIC X(24)
+009697                             VALUE '06BADAJOZ               '.
+009698         10  FILLER                  PIC X(24)
+009699                             VALUE '07ILLES BALEARS         '.
+009700         10  FILLER                  PIC X(24)
+009701                             VALUE '08BARCELONA             '.
+009702         10  FILLER                  PIC X(24)
+009703                             VALUE '09BURGOS                '.
+009704         10  FILLER                  PIC X(24)
+009705                             VALUE '10CACERES               '.
+009706         10  FILLER                  PIC X(24)
+009707                             VALUE '11CADIZ                 '.
+009708         10  FILLER                  PIC X(24)
+009709                             VALUE '12CASTELLON             '.
+009710         10  FILLER                  PIC X(24)
+009711                             VALUE '13CIUDAD REAL           '.
+009712         10  FILLER                  PIC X(24)
+009713                             VALUE '14CORDOBA               '.
+009714         10  FILLER                  PIC X(24)
+009715                             VALUE '15CORUÑA LA             '.
+009716         10  FILLER                  PIC X(24)
+009717                             VALUE '16CUENCA                '.
+009718         10  FILLER                  PIC X(24)
+009719                             VALUE '17GIRONA                '.
+009720         10  FILLER                  PIC X(24)
+009721                             VALUE '18GRANADA               '.
+009722         10  FILLER                  PIC X(24)
+009723                             VALUE '19GUADALAJARA           '.
+009724         10  FILLER                  PIC X(24)
+009725                             VALUE '20GUIPUZCOA             '.
+009726         10  FILLER                  PIC X(24)
+009727                             VALUE '21HUELVA                '.
+009728         10  FILLER                  PIC X(24)
+009729                             VALUE '22HUESCA                '.
+009730         10  FILLER                  PIC X(24)
+009731                             VALUE '23JAEN                  '.
+009732         10  FILLER                  PIC X(24)
+009733                             VALUE '24LEON                  '.
+009734         10  FILLER                  PIC X(24)
+009735                             VALUE '25LLEIDA                '.
+009736         10  FILLER                  PIC X(24)
+009737                             VALUE '26RIOJA, LA             '.
+009738         10  FILLER                  PIC X(24)
+009739                             VALUE '27LUGO                  '.
+009740         10  FILLER                  PIC X(24)
+009741                             VALUE '28MADRID                '.
+009742         10  FILLER                  PIC X(24)
+009743                             VALUE '29MALAGA                '.
+009744         10  FILLER                  PIC X(24)
+009745                             VALUE '30MURCIA                '.
+009746         10  FILLER                  PIC X(24)
+009747                             VALUE '31NAVARRA               '.
+009748         10  FILLER                  PIC X(24)
+009749                             VALUE '32OURENSE               '.
+009750         10  FILLER                  PIC X(24)
+009751                             VALUE '33ASTURIAS              '.
+009752         10  FILLER                  PIC X(24)
+009753                             VALUE '34PALENCIA              '.
+009754         10  FILLER                  PIC X(24)
+009755                             VALUE '35PALMAS, LAS           '.
+009756         10  FILLER                  PIC X(24)
+009757                             VALUE '36PONTEVEDRA            '.
+009758         10  FILLER                  PIC X(24)
+009759                             VALUE '37SALAMANCA             '.
+009760         10  FILLER                  PIC X(24)
+009761                             VALUE '38SANTA CRUZ DE TENERIFE'.
+009762         10  FILLER                  PIC X(24)
+009763                             VALUE '39CANTABRIA             '.
+009764         10  FILLER                  PIC X(24)
+009765                             VALUE '40SEGOVIA               '.
+009766         10  FILLER                  PIC X(24)
+009767                             VALUE '41SEVILLA               '.
+009768         10  FILLER                  PIC X(24)
+009769                             VALUE '42SORIA                 '.
+009770         10  FILLER                  PIC X(24)
+009771                             VALUE '43TARRAGONA             '.
+009772         10  FILLER                  PIC X(24)
+009773                             VALUE '44TERUEL                '.
+009774         10  FILLER                  PIC X(24)
+009775                             VALUE '45TOLEDO                '.
+009776         10  FILLER                  PIC X(24)
+009777                             VALUE '46VALENCIA              '.
+009778         10  FILLER                  PIC X(24)
+009779                             VALUE '47VALLADOLID            '.
+009780         10  FILLER                  PIC X(24)
+009781                             VALUE '48VIZCAYA               '.
+009782         10  FILLER                  PIC X(24)
+009783                             VALUE '49ZAMORA                '.
+009784         10  FILLER                  PIC X(24)
+009785                             VALUE '50ZARAGOZA              '.
+009786         10  FILLER                  PIC X(24)
+009787                             VALUE '51CEUTA                 '.
+009788         10  FILLER                  PIC X(24)
+009789                             VALUE '52MELILLA               '.
+009790
+009791     05  TBL-PROVINCIAS              REDEFINES PROVINCIAS
+009792                                     OCCURS 52 TIMES
+009793                                     ASCENDING KEY TBL-CODIGO
+009794                                     INDEXED BY AUX-I.
+009795
+009796         10  TBL-CODIGO              PIC 9(2).
+009797         10  TBL-PROVINCIA           PIC X(22).
+009798
+009799******************************************************************
+009800*                    RECORD LAYOUT                             *
+009900*----------------------------------------------------------------*
+010000* DESCRIPCION DEL REGISTRO DEL FICHERO DE EMPLEADA.-ENTRADA-     *
+010100******************************************************************
+010200     05  WS-IN-REG-EMPLEADO.
+010300         10  WS-IN-CODIGO            PIC 9(5)    VALUE ZEROS.
+010400         10  WS-IN-NOMBRE            PIC X(20)   VALUE SPACES.
+010500         10  WS-IN-CPOSTAL           PIC 9(5)    VALUE ZEROS.
+010600         10  WS-IN-CALLE             PIC X(20)   VALUE SPACES.
+010601         10  WS-IN-DEPAR             PIC 9(4)    VALUE ZEROES.
+010602         10  WS-IN-SALARIO           PIC S9(9)V9(2) COMP-3
+010603                             VALUE ZEROS.
+010630         10  WS-IN-DNI-N             PIC 9(8)    VALUE ZEROS.
+010700         10  FILLER                  PIC X(33)   VALUE SPACES.
+010800
+010900******************************************************************
+011000*                       RECORD LAYOUT                            *
+011100*----------------------------------------------------------------*
+011200* DESCRIPCION DEL REGISTRO DEL FICHERO DE EMPLEADA.-SALIDA -     *
+011300******************************************************************
+011400     05  WS-OU-REG-SALIDA.
+011500         10  WS-OU-CODIGO            PIC 9(5)    VALUE ZEROS.
+011600         10  WS-OU-NOMBRE            PIC X(20)   VALUE SPACES.
+011700         10  WS-OU-CPOSTAL           PIC 9(5)    VALUE ZEROS.
+011800         10  WS-OU-CALLE             PIC X(20)   VALUE SPACES.
+011900         10  WS-OU-DEPAR             PIC 9(4)    VALUE ZEROES.
+012000         10  WS-OU-SALARIO           PIC S9(9)V9(2) COMP-3
+012100                             VALUE ZEROS.
+012110         10  WS-OU-DNI.
+012120             15  WS-OU-DNI-N         PIC 9(08)   VALUE ZEROS.
+012130             15  WS-OU-DNI-L         PIC X(01)   VALUE SPACES.
+012140         10  FILLER                  PIC X(03)   VALUE SPACES.
+012150         10  WS-OU-NOMBRE-PROV       PIC X(22)   VALUE ZEROS.
+012400         10  FILLER                  PIC X(07)   VALUE SPACES.
+012500
+012501******************************************************************
+012502*                   REPORT LINES AND HEADING.                    *
+012503******************************************************************
+012504     05  RPT-CAB1.
+012505         10  FILLER                  PIC X(10)   VALUE SPACES.
+012506         10  FILLER                  PIC X(18)   VALUE 'PROGRAMA:
+012507-            'PB23P01'.
+012508         10  FILLER                  PIC X(25)   VALUE SPACES.
+012509         10  FILLER                  PIC X(07)   VALUE 'FECHA: '.
+012510         10  RPT1-DIA                PIC 99      VALUE ZEROS.
+012511         10  FILLER                  PIC X       VALUE '/'.
+012512         10  RPT1-MES                PIC 99      VALUE ZEROS.
+012513         10  FILLER                  PIC X       VALUE '/'.
+012514         10  RPT1-ANYO               PIC 9(4)    VALUE ZEROS.
+012515
+012516     05  RPT-CAB2.
+012517         10  FILLER                  PIC X(53)   VALUE SPACES.
+012518         10  FILLER                  PIC X(07)   VALUE 'PAGINA:'.
+012519         10  RPT2-PAGINA             PIC ZZ9     VALUE ZEROS.
+012520
+012521     05  RPT-CAB3.
+012522         10  FILLER                  PIC X(15)   VALUE SPACES.
+012523         10  FILLER                  PIC X(39)   VALUE 'LISTADO DE
+012524-            ' EMPLEADOS POR DEPARTAMENTO '.
+012527
+012528     05  RPT-CAB4.
+012529         10  FILLER                  PIC X(10)   VALUE SPACES.
+012530         10  FILLER                  PIC X(60)   VALUE ALL '='.
+012531
+012532     05  RPT-CAB5.
+012533         10  FILLER                  PIC X(15)   VALUE SPACES.
+012534         10  FILLER                  PIC X(85)   VALUE ' DEPTO
+012535-            'CODIGO    NOMBRE  PROV NOM PROVIN  DNI  SALARIO'.
+012536
+012537     05  RPT-CAB6.
+012538         10  FILLER                  PIC X(15)   VALUE SPACES.
+012539         10  FILLER                  PIC X(85)   VALUE '======  ==
+012540-            '==================  ============='.
+012541
+012542     05  RPT-DET.
+012543         10  FILLER                  PIC X(16)   VALUE SPACES.
+012544         10  RPT-DET-DEPAR           PIC Z(04)   VALUE ZEROS.
+012545         10  FILLER                  PIC X(05)   VALUE SPACES.
+012546         10  RPT-DET-CODIGO          PIC Z(06)   VALUE ZEROS.
+012547         10  FILLER                  PIC X(08)   VALUE SPACES.
+012548         10  RPT-DET-NOMBRE          PIC X(15)   VALUE SPACES.
+012549         10  FILLER                  PIC X(01)   VALUE SPACES.
+012550         10  RPT-DET-SALARIO         PIC Z.ZZZ.ZZZ,99+
+012551                             VALUE ZEROS.
+012552
+012553     05  RPT-GUIONES.
+012554         10 FILLER                   PIC X(45)  VALUE SPACES.
+012555         10 FILLER                   PIC X(13)  VALUE ALL '='.
+012556
+012557     05  RPT-TOT.
+012558         10 FILLER                   PIC X(12)  VALUE SPACES.
+012559         10 FILLER                   PIC X(08)  VALUE 'TOTAL DE'.
+012560         10 RPT-TOT-REGISTROS        PIC ZZ9    VALUE ZEROS.
+012561         10 FILLER                   PIC X(18) VALUE ' REGISTROS
+012562-           ' '.
+012563         10 RPT-TOT-SALARIO          PIC Z.ZZZ.ZZZ.ZZ9,99+
+012564                                 VALUE ZEROS.
+012565
+012566******************************************************************
+012567*                  COMUNICATION AREA                             *
+012568******************************************************************
+012569     05  COM-AREA.
+012570         10  COM-DATOS-ENVIADOS.
+012571             15  COM-DNI             PIC 9(8)    VALUE ZEROS.
+012572
+012580         10  COM-DATOS-RECIBIDOS.
+012590             15  COM-LETRA           PIC X       VALUE SPACES.
+012591             15  COM-RC              PIC X(2)    VALUE SPACES.
+012592         10  COM-CODIGO-RETORNO      PIC X(2)    VALUE SPACES.
+012593
+012600******************************************************************
+012700*                          FILE STATUS                           *
+012800******************************************************************
+012900     05  FS-EMPLEADO                 PIC 99      VALUE ZEROS.
+013000     05  FS-SALIDA                   PIC 99      VALUE ZEROS.
+013100
+013200******************************************************************
+013300*                     FLAGS AND SWITCHES                         *
+013400******************************************************************
+013500     05  END-OF-FILE-SWITCH          PIC X       VALUE 'N'.
+013600         88  END-OF-FILE                         VALUE 'Y'.
+013700         88  NOT-END-OF-FILE                     VALUE 'N'.
+013800
+013900     05  END-FILE-SWITCH             PIC X       VALUE 'N'.
+014000         88  EMPTY-FILE                          VALUE 'Y'.
+014100
+014200     05  ERRORES-SWITCH              PIC X       VALUE 'N'.
+014300         88  ERRORES                             VALUE 'Y'.
+014400
+014500******************************************************************
+014600*                    COUNTERS AND ACCUMULATORS                   *
+014700******************************************************************
+015240     05  CTR-COUNTERS.
+015250         10  CTR-LEIDOS              PIC S9(9) COMP-3
+015260                             VALUE ZEROS.
+015270         10  CTR-GRABADOS            PIC S9(9) COMP-3
+015280                             VALUE ZEROS.
+015290         10  CTR-LINEAS              PIC S9(3) COMP-3
+015291                             VALUE 60.
+015292         10  CTR-PAGINAS             PIC S9(3) COMP-3
+015293                             VALUE ZEROS.
+015294     05  ACC-TOTAL                   PIC S9(9)V9(2) COMP-3
+015295                             VALUE ZEROS.
+015296
+015300******************************************************************
+015400*                    CONSTANTS AND LITERALS                      *
+015500******************************************************************
+015600     05  CTE-1                       PIC 9       VALUE 1.
+015610     05  CTE-2                       PIC 9       VALUE 2.
+015620     05  CTE-3                       PIC 9       VALUE 3.
+015700     05  CTE-1001                    PIC 9(4)    VALUE 1001.
+015710     05  CTE-10                      PIC 9(2)    VALUE 10.
+015800     05  CTE-PROGRAMA                PIC X(8)    VALUE 'PB23P01'.
+016700     05  CTE-GUIONES                 PIC X(7)    VALUE ALL '='.
+016710     05  CTE-MODULO                  PIC X(08)   VALUE 'PB23MDNI'.
+016810     05  CTE-MAX-LINEAS              PIC 99      VALUE 59.
+016830     05  LIT-VACIO                   PIC X(90)   VALUE '
+016840-            '              NO HAY REGISTROS PARA ESTE INFORME'.
+016850
+016900******************************************************************
+017000*                    SCRATCH AREA                                *
+017100******************************************************************
+017300     05  AUX-FECHA.
+017400         10  AUX-ANYO                PIC 9(4)    VALUE ZERO.
+017500         10  AUX-MES                 PIC 9(2)    VALUE ZERO.
+017600         10  AUX-DIA                 PIC 9(2)    VALUE ZERO.
+017700
+017800     05  AUX-HOR.
+017900         10  AUX-HORA                PIC 9(2)    VALUE ZERO.
+018000         10  AUX-MINUTO              PIC 9(2)    VALUE ZERO.
+018100         10  AUX-SEGUNDO             PIC 9(2)    VALUE ZERO.
+018200         10  AUX-MILI                PIC 9(2)    VALUE ZERO.
+018300
+018400******************************************************************
+018500*                   PROCEDURE DIVISION                           *
+018600******************************************************************
+018700 PROCEDURE DIVISION.
+018800
+018900******************************************************************
+019000*                   1000-MAINLINE                                *
+019100*----------------------------------------------------------------*
+019200* ESTE PARRAFO CONTROLA LA ESTRUCTURA DEL PROCESO DEL PROGRAMA   *
+019300******************************************************************
+019400 1000-MAINLINE.
+019500     PERFORM 2000-HOUSEKEEPING
+019600        THRU 2000-HOUSEKEEPING-EXIT.
+019700
+019800     PERFORM 3000-PROCESS
+019900        THRU 3000-PROCESS-EXIT
+020000       UNTIL END-OF-FILE
+020100          OR ERRORES.
+020200
+020300     PERFORM 8000-WRAP-UP
+020400        THRU 8000-WRAP-UP-EXIT.
+020500
+020600     STOP RUN.
+020700******************************************************************
+020800*                   2000-HOUSEKEEPING.                           *
+020900******************************************************************
+021000 2000-HOUSEKEEPING.
+021100     ACCEPT AUX-FECHA FROM DATE YYYYMMDD.
+021200     ACCEPT AUX-HOR   FROM TIME.
+021300
+021400     DISPLAY 'COMIENZA EL PROGRAMA: ' CTE-PROGRAMA.
+021500     DISPLAY ' FECHA: ' AUX-ANYO '-' AUX-MES '-' AUX-DIA
+021600         ' HORA: '      AUX-HORA ':' AUX-MINUTO ':' AUX-SEGUNDO
+021700         ':' AUX-MILI.
+021900     DISPLAY CTE-GUIONES.
+022000
+022100*--> MOVE 'N' TO END-OF-FILE-SWITCH
+022200     SET NOT-END-OF-FILE TO TRUE.
+022300*--> 2100-ABRIR-FICHERO
+022400     OPEN INPUT EMPLEADO.
+022500     OPEN OUTPUT SALIDA.
+022600
+022700     IF  FS-EMPLEADO NOT EQUAL TO ZEROS
+022800         DISPLAY 'ERROR AL ABRIR EMPLEADO. FS= ' FS-EMPLEADO
+022900
+023000         SET ERRORES TO TRUE
+023100     END-IF.
+023200
+023300     IF  FS-SALIDA NOT EQUAL TO ZEROS
+023400         DISPLAY 'ERROR AL ABRIR SALIDA. FS= ' FS-SALIDA
+023500         SET ERRORES TO TRUE
+023600     END-IF.
+023700
+023800     PERFORM 9000-LEER
+023900        THRU 9000-LEER-EXIT.
+024000
+024100* --> CONTROL DE FICHERO VACIO (2300-CONTROL-VACIO)
+024200     IF END-OF-FILE
+024300        SET EMPTY-FILE TO TRUE
+024400     END-IF.
+024500
+024600 2000-HOUSEKEEPING-EXIT.
+024700     EXIT.
+024800
+024900******************************************************************
+025000*                   3000-PROCESS                                 *
+025300******************************************************************
+025400 3000-PROCESS.
+025500
+025510     IF CTR-LINEAS GREATER THAN CTE-MAX-LINEAS
+025520        PERFORM 9100-CABECERAS
+025530           THRU 9100-CABECERAS-EXIT
+025540     END-IF.
+025550
+025600     PERFORM 3100-LLAMAR-MODULO-DNI
+025700        THRU 3100-LLAMAR-MODULO-DNI-EXIT.
+025830
+026031
+026040     WRITE REG-SALIDA FROM WS-OU-REG-SALIDA.
+026050     MOVE WS-IN-REG-EMPLEADO TO WS-OU-REG-SALIDA.
+026060
+026200     IF FS-SALIDA EQUAL TO ZEROS
+026300        ADD CTE-1 TO CTR-GRABADOS
+026400
+026500     ELSE
+026600        DISPLAY 'ERROR AL GRABAR SALIDA ' FS-SALIDA
+026700
+026800        SET ERRORES TO TRUE
+026900     END-IF.
+027000
+027100     PERFORM 9000-LEER
+027200        THRU 9000-LEER-EXIT.
+027300
+027310 3000-PROCESS-EXIT.
+027320     EXIT.
+027330
+027400
+027500******************************************************************
+027600*                   3100-LLAMAR-MODULO-DNI                       *
+027700*----------------------------------------------------------------*
+027800*ESTE PROCESO CONTROLA VACIO/ERRORES, CIERRA FICHERO Y MUESTRA   *
+027900******************************************************************
+028000 3100-LLAMAR-MODULO-DNI.
+028100     MOVE WS-IN-REG-EMPLEADO TO WS-OU-REG-SALIDA.
+028200     MOVE WS-IN-DNI-N TO COM-DNI.
+028202
+028203     ADD WS-IN-SALARIO TO ACC-TOTAL.
+028204     ADD CTE-1         TO CTR-LINEAS
+028205
+028210     CALL CTE-MODULO
+028300         USING COM-AREA
+028400         ON  EXCEPTION
+028500             DISPLAY '** ERROR: MODULO PB0XMDNI NO COMPILADO. **'
+028600
+028700             MOVE CTE-1001 TO RETURN-CODE
+028800
+028900         NOT ON EXCEPTION
+029000
+029100             IF  COM-RC EQUAL TO SPACES
+029200                 MOVE COM-LETRA   TO WS-OU-DNI-L
+029300                 MOVE WS-IN-DNI-N TO WS-OU-DNI-N
+029400             ELSE
+029500                 DISPLAY 'ERROR EN MODULO= ' CTE-MODULO
+029600
+029700                 MOVE CTE-1001 TO RETURN-CODE
+029800             END-IF
+029810     END-CALL.
+029820
+029830     PERFORM 3200-BUSCAR-PROV
+029840        THRU 3200-BUSCAR-PROV-EXIT.
+029850
+029900 3100-LLAMAR-MODULO-DNI-EXIT.
+030000     EXIT.
+030001
+030010*****************************************************************
+030020*                   3200-BUSCAR-PROV                             *
+030030* -------------------------------------------------------------- *
+030040* BUSCA EL NOMBRE DE LA PROVINCIA DE FORMA BINARIA/DICOTOMICA    *
+030050******************************************************************
+030060 3200-BUSCAR-PROV.
+030070     SEARCH ALL TBL-PROVINCIAS
+030080         AT END
+030090             MOVE 'PROVINCIA-NOT FOUND ** ' TO WS-OU-NOMBRE-PROV
+030091
+030092         WHEN TBL-CODIGO(AUX-I) EQUAL TO WS-OU-CPOSTAL(1:2)
+030093             MOVE TBL-PROVINCIA(AUX-I) TO WS-OU-NOMBRE-PROV
+030094     END-SEARCH.
+030095
+030096 3200-BUSCAR-PROV-EXIT.
+030097     EXIT.
+030098
+030120******************************************************************
+030200*                   8000-WRAP-UP                                 *
+030300*----------------------------------------------------------------*
+030400*ESTE PROCESO CONTROLA VACIO/ERRORES, CIERRA FICHERO Y MUESTRA   *
+030500*  CONTADORES                                                    *
+030600******************************************************************
+030700 8000-WRAP-UP.
+030710     EVALUATE TRUE
+030720         WHEN EMPTY-FILE
+030730                 PERFORM 9100-CABECERAS
+030740                    THRU 9100-CABECERAS-EXIT
+030750             WRITE REG-SALIDA FROM LIT-VACIO
+030760*-->  SI SE HA PRODUCIDO ALGUN ERROR EN LA EJECUCION DEL PROGRAMA,
+030770*     MANDASMOS UN MENSAJE MUY CLARO DE QUE HAY ERRORES
+030780         WHEN ERRORES
+030790             DISPLAY '//////////////////////////'
+030791             DISPLAY '// EJECUCION NO CORRECTA//'
+030792             DISPLAY '//SE CANCELA EL PROGRAMA//'
+030793             DISPLAY '//////////////////////////'
+030794
+030795             MOVE CTE-1001 TO RETURN-CODE
+030796
+030797         WHEN OTHER
+030798             IF  CTR-LINEAS GREATER THAN CTE-MAX-LINEAS
+030799                 PERFORM 9100-CABECERAS
+030800                    THRU 9100-CABECERAS-EXIT
+030810             END-IF
+030820
+030830             PERFORM 8100-TOTALES
+030840                THRU 8100-TOTALES-EXIT
+030850
+030860     END-EVALUATE.
+030870
+030880     CLOSE EMPLEADO
+030890            SALIDA.
+030891
+030892     DISPLAY CTE-GUIONES.
+030893     DISPLAY 'LEIDOS EMPLEADO:  ' CTR-LEIDOS.
+030894     DISPLAY 'GRABADOS       :  ' CTR-GRABADOS.
+030895     DISPLAY 'FIN DE PROGRAMA:  ' CTE-PROGRAMA.
+030896     DISPLAY CTE-GUIONES.
+030897
+030900
+032900 8000-WRAP-UP-EXIT.
+033000     EXIT.
+033100
+033110******************************************************************
+033120*                   8100-TOTALES                                 *
+033130*----------------------------------------------------------------*
+033140* LEE EL REGISTRO DEL FICHERO DE EMPLEADO                        *
+033150******************************************************************
+033160 8100-TOTALES.
+033170     WRITE REG-SALIDA FROM RPT-GUIONES
+033180         AFTER ADVANCING CTE-2 LINES.
+033190
+033191     ADD CTE-2 TO CTR-LINEAS.
+033192
+033193     MOVE CTR-LEIDOS TO RPT-TOT-REGISTROS.
+033194     MOVE ACC-TOTAL  TO RPT-TOT-SALARIO.
+033195
+033196     WRITE REG-SALIDA FROM RPT-TOT
+033197         AFTER ADVANCING CTE-3 LINES.
+033198
+033199 8100-TOTALES-EXIT.
+033200     EXIT.
+033201
+033210******************************************************************
+033300*                   9000-LEER                                    *
+033400*----------------------------------------------------------------*
+033500* LEE EL REGISTRO DEL FICHERO DE EMPLEADO                        *
+033600******************************************************************
+033700 9000-LEER.
+033800     READ EMPLEADO INTO WS-IN-REG-EMPLEADO
+033900         AT END
+034000             SET END-OF-FILE TO TRUE
+034100
+034200         NOT AT END
+034300             ADD CTE-1 TO CTR-LEIDOS
+034400     END-READ.
+034500
+034600 9000-LEER-EXIT.
+034700     EXIT.
+034701
+034710******************************************************************
+034720*                   9100-CABECERAS                               *
+034730*----------------------------------------------------------------*
+034740* SUMA 1 AL NUMERO DE PAGINA Y ESCRIBE EL CONJUNTO DE LINEAS QUE *
+034750* FORMAN LA CABECERA E INICIALIZA EL NUMERO DE LINEAS.           *
+034760******************************************************************
+034770 9100-CABECERAS.
+034780     INITIALIZE REG-SALIDA.
+034790
+034791     WRITE REG-SALIDA
+034792         AFTER ADVANCING PAGE.
+034793     WRITE REG-SALIDA FROM RPT-CAB1.
+034794
+034795     ADD CTE-1 TO CTR-PAGINAS.
+034796
+034797     MOVE CTR-PAGINAS TO RPT2-PAGINA.
+034798
+034799     WRITE REG-SALIDA FROM RPT-CAB2.
+034800     WRITE REG-SALIDA FROM RPT-CAB3
+034810         AFTER ADVANCING CTE-2 LINES.
+034820     WRITE REG-SALIDA FROM RPT-CAB4.
+034830     WRITE REG-SALIDA FROM RPT-CAB5
+034840         AFTER ADVANCING CTE-2 LINES.
+034850
+034860     MOVE CTE-10 TO CTR-LINEAS.
+034870
+034880  9100-CABECERAS-EXIT.
+034890     EXIT.
